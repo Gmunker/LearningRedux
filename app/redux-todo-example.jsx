@@ -3,7 +3,13 @@ import {createStore} from 'redux';
 
 console.log('Starting redux example');
 
-let reducer = (state = {name: "Anonymous"}, action) => {
+var stateDefault = {
+    searchText: "",
+    showComplated: false,
+    todos: []
+  };
+
+let reducer = (state = stateDefault, action) => {
   //state = state || {name: "Anonymous"};
   return state;
 };
