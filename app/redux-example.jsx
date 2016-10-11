@@ -3,7 +3,15 @@ import {createStore, compose} from 'redux';
 
 console.log('Starting redux example');
 
-let reducer = (state = {name: "Anonymous"}, action) => {
+let stateDefault = {
+  name: "Anonymous",
+  hobbies: [],
+  movies: []
+};
+
+let nextHobbyId = 1;
+let nextMovieId = 1;
+let reducer = (state = stateDefault, action) => {
   //state = state || {name: "Anonymous"};
   switch (action.type) {
     case 'CHANGE_NAME':
@@ -11,6 +19,39 @@ let reducer = (state = {name: "Anonymous"}, action) => {
         ...state,
         name: action.name
       };
+      case 'ADD_HOBBY':
+        return {
+          ...state,
+          hobbies: [
+            ...state.hobbies,
+            {
+              id: nextHobbyId++,
+              hobby: action.hobby
+            }
+          ]
+        };
+      case 'REMOVE_HOBBY':
+      return {
+        ...state,
+        hobbies: state.hobbies.filter((hobby) => hobby.id !== action.id)
+      }
+      case 'ADD_MOVIE':
+        return {
+          ...state,
+          movies: [
+            ...state.movies,
+            {
+              id: nextMovieId++,
+              title: action.title,
+              genre: action.genre              
+            }
+          ]
+        };
+      case 'REMOVE_MOVIE':
+        return {
+          ...state,
+          movies: state.movies.filter((movie) => movie.id !== action.id)
+        }
       default:
         return state;
   }
@@ -27,6 +68,8 @@ let unsubscribe = store.subscribe(() => {
 
   console.log('Name is', state.name)
   document.getElementById('app').innerHTML = state.name;
+
+  console.log('New State', store.getState());
 });
 
 let currentState = store.getState();
@@ -40,8 +83,45 @@ store.dispatch({
   name: 'Greg'
 });
 
+store.dispatch({
+  type: 'ADD_HOBBY',
+  hobby: 'running'
+});
+
+store.dispatch({
+  type: 'ADD_HOBBY',
+  hobby: 'Walking'
+});
+
+store.dispatch({
+  type: 'REMOVE_HOBBY',
+  id: 2
+});
+
+store.dispatch({
+  type: 'ADD_MOVIE', 
+  title: 'Ghostbusters',
+  genre: 'Romance'
+});
+
+store.dispatch({
+  type: 'ADD_MOVIE', 
+  title: 'Star Wars: The Force Awakens',
+  genre: 'Sci-fi'
+});
+
+store.dispatch({
+  type: 'ADD_MOVIE', 
+  title: 'Mallrats',
+  genre: 'Drama'
+});
 
 store.dispatch({
   type: 'CHANGE_NAME',
   name: 'April'
 });
+
+store.dispatch({
+  type: 'REMOVE_MOVIE',
+  id: 1
+})
