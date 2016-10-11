@@ -3,15 +3,10 @@ import {createStore, compose, combineReducers} from 'redux';
 
 console.log('Starting redux example');
 
-let stateDefault = {
-  name: "Anonymous",
-  hobbies: [],
-  movies: []
-};
 
-let nextHobbyId = 1;
-let nextMovieId = 1;
 
+// Name Reducer and Action Generators
+//-----------------------------------
 let nameReducer = (state = "Anonymous", action) => {
   switch (action.type) {
     case 'CHANGE_NAME':
@@ -21,6 +16,16 @@ let nameReducer = (state = "Anonymous", action) => {
   };
 };
 
+let changeName = (name) => {
+  return {
+    type: 'CHANGE_NAME',
+    name
+  }
+};
+
+//Hobbies Reducer and Action Generators
+//-------------------------------------
+let nextHobbyId = 1;
 let hobbiesReducer = (state = [], action) => {
   switch(action.type) {
      case 'ADD_HOBBY':
@@ -37,6 +42,23 @@ let hobbiesReducer = (state = [], action) => {
   }
 };
 
+let addHobby = (hobby) => {
+  return {
+    type: "ADD_HOBBY",
+    hobby
+  };
+};
+
+let removeHobby = (id) => {
+  return {
+    type: 'REMOVE_HOBBY',
+    id
+  };
+};
+
+//Movies Reducer and Action Generators
+//------------------------------------
+let nextMovieId = 1;
 let moviesReducer = (state = [], action) => {
   switch(action.type) {
     case 'ADD_MOVIE':
@@ -53,6 +75,21 @@ let moviesReducer = (state = [], action) => {
       default:
         return state;
   }
+};
+
+let addMovie = (title, genre) => {
+  return {
+    type: 'ADD_MOVIE',
+    title,
+    genre
+  };
+};
+
+let removeMovie = (id) => {
+  return {
+    type: 'REMOVE_MOVIE',
+    id
+  };
 };
 
 let reducer = combineReducers({
@@ -76,58 +113,15 @@ let unsubscribe = store.subscribe(() => {
   console.log('New State', store.getState());
 });
 
-let currentState = store.getState();
-
-//console.log('CurrentState', currentState);
-
 
 //unsubscribe();
 
-  store.dispatch({
-    type: 'CHANGE_NAME',
-    name: 'Greg'
-  });
-
-  store.dispatch({
-    type: 'ADD_HOBBY',
-    hobby: 'running'
-  });
-
-  store.dispatch({
-    type: 'ADD_HOBBY',
-    hobby: 'Walking'
-  });
-
-  store.dispatch({
-    type: 'REMOVE_HOBBY',
-    id: 2
-  });
-
-  store.dispatch({
-    type: 'ADD_MOVIE', 
-    title: 'Ghostbusters',
-    genre: 'Romance'
-  });
-
-  store.dispatch({
-    type: 'ADD_MOVIE', 
-    title: 'Star Wars: The Force Awakens',
-    genre: 'Sci-fi'
-  });
-
-  store.dispatch({
-    type: 'ADD_MOVIE', 
-    title: 'Mallrats',
-    genre: 'Drama'
-  });
-
-  store.dispatch({
-    type: 'CHANGE_NAME',
-    name: 'April'
-  });
-
-  store.dispatch({
-    type: 'REMOVE_MOVIE',
-    id: 1
-  });
-
+store.dispatch(changeName("Greg"));
+store.dispatch(addHobby("Running"));
+store.dispatch(addHobby("Walking"));
+store.dispatch(addMovie('Ghostbusters', "Romance"));
+store.dispatch(addMovie('Star Wars: The Force Awakens', "Sci-fi"));
+store.dispatch(addMovie("Mallrats", "Drama"));
+store.dispatch(changeName("April"));
+store.dispatch(removeMovie(1));
+store.dispatch(changeName("Anestasia"));
