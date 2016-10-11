@@ -1,5 +1,5 @@
 import redux from 'redux';
-import {createStore, compose} from 'redux';
+import {createStore, compose, combineReducers} from 'redux';
 
 console.log('Starting redux example');
 
@@ -11,51 +11,55 @@ let stateDefault = {
 
 let nextHobbyId = 1;
 let nextMovieId = 1;
-let reducer = (state = stateDefault, action) => {
-  //state = state || {name: "Anonymous"};
+
+let nameReducer = (state = "Anonymous", action) => {
   switch (action.type) {
     case 'CHANGE_NAME':
-      return {
-        ...state,
-        name: action.name
-      };
-      case 'ADD_HOBBY':
-        return {
-          ...state,
-          hobbies: [
-            ...state.hobbies,
-            {
-              id: nextHobbyId++,
-              hobby: action.hobby
-            }
-          ]
-        };
+      return action.name;
+      default:
+        return state;
+  };
+};
+
+let hobbiesReducer = (state = [], action) => {
+  switch(action.type) {
+     case 'ADD_HOBBY':
+        return [
+          ...state,{
+            id: nextHobbyId++,
+            hobby: action.hobby
+          }
+        ]
       case 'REMOVE_HOBBY':
-      return {
-        ...state,
-        hobbies: state.hobbies.filter((hobby) => hobby.id !== action.id)
-      }
-      case 'ADD_MOVIE':
-        return {
-          ...state,
-          movies: [
-            ...state.movies,
+        return state.filter((hobby) => hobby.id !== action.id)
+      default:
+        return state;
+  }
+};
+
+let moviesReducer = (state = [], action) => {
+  switch(action.type) {
+    case 'ADD_MOVIE':
+        return [
+            ...state,
             {
               id: nextMovieId++,
               title: action.title,
               genre: action.genre              
             }
           ]
-        };
       case 'REMOVE_MOVIE':
-        return {
-          ...state,
-          movies: state.movies.filter((movie) => movie.id !== action.id)
-        }
+        return state.filter((movie) => movie.id !== action.id)
       default:
         return state;
   }
 };
+
+let reducer = combineReducers({
+  name: nameReducer,
+  hobbies: hobbiesReducer,
+  movies: moviesReducer
+});
 
 
 let store = createStore(reducer, compose(
@@ -73,55 +77,57 @@ let unsubscribe = store.subscribe(() => {
 });
 
 let currentState = store.getState();
-console.log('CurrentState', currentState);
+
+//console.log('CurrentState', currentState);
 
 
 //unsubscribe();
 
-store.dispatch({
-  type: 'CHANGE_NAME',
-  name: 'Greg'
-});
+  store.dispatch({
+    type: 'CHANGE_NAME',
+    name: 'Greg'
+  });
 
-store.dispatch({
-  type: 'ADD_HOBBY',
-  hobby: 'running'
-});
+  store.dispatch({
+    type: 'ADD_HOBBY',
+    hobby: 'running'
+  });
 
-store.dispatch({
-  type: 'ADD_HOBBY',
-  hobby: 'Walking'
-});
+  store.dispatch({
+    type: 'ADD_HOBBY',
+    hobby: 'Walking'
+  });
 
-store.dispatch({
-  type: 'REMOVE_HOBBY',
-  id: 2
-});
+  store.dispatch({
+    type: 'REMOVE_HOBBY',
+    id: 2
+  });
 
-store.dispatch({
-  type: 'ADD_MOVIE', 
-  title: 'Ghostbusters',
-  genre: 'Romance'
-});
+  store.dispatch({
+    type: 'ADD_MOVIE', 
+    title: 'Ghostbusters',
+    genre: 'Romance'
+  });
 
-store.dispatch({
-  type: 'ADD_MOVIE', 
-  title: 'Star Wars: The Force Awakens',
-  genre: 'Sci-fi'
-});
+  store.dispatch({
+    type: 'ADD_MOVIE', 
+    title: 'Star Wars: The Force Awakens',
+    genre: 'Sci-fi'
+  });
 
-store.dispatch({
-  type: 'ADD_MOVIE', 
-  title: 'Mallrats',
-  genre: 'Drama'
-});
+  store.dispatch({
+    type: 'ADD_MOVIE', 
+    title: 'Mallrats',
+    genre: 'Drama'
+  });
 
-store.dispatch({
-  type: 'CHANGE_NAME',
-  name: 'April'
-});
+  store.dispatch({
+    type: 'CHANGE_NAME',
+    name: 'April'
+  });
 
-store.dispatch({
-  type: 'REMOVE_MOVIE',
-  id: 1
-})
+  store.dispatch({
+    type: 'REMOVE_MOVIE',
+    id: 1
+  });
+
