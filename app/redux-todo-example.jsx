@@ -1,5 +1,5 @@
 import redux from 'redux';
-import {createStore} from 'redux';
+import {createStore, compose} from 'redux';
 
 console.log('Starting redux example');
 
@@ -22,7 +22,19 @@ let reducer = (state = stateDefault, action) => {
 };
 
 
-let store = createStore(reducer);
+let store = createStore(reducer, compose(
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+));
+
+// Subscribe to changes
+let unsubscribe = store.subscribe(() => {
+  let state = store.getState();
+
+  console.log('Name is', state.searchText)
+  document.getElementById('app').innerHTML = state.searchText;
+});
+
+
 let currentState = store.getState();
 console.log('CurrentState', currentState);
 
@@ -31,15 +43,28 @@ store.dispatch({
   searchText: "Dog"
 });
 
-console.log('new searchText should be dog', store.getState());
+store.dispatch({
+  type: "CHANGE_SEARCH_TEXT",
+  searchText: "Work"
+});
 
+store.dispatch({
+  type: "CHANGE_SEARCH_TEXT",
+  searchText: "Something"
+});
+
+store.dispatch({
+  type: "CHANGE_SEARCH_TEXT",
+  searchText: "ELse"
+});
 
 
 /*
-change-searchText
-reduce switch
 
-console.log( new state)
+subscribe for searchText
+
+dev tools
+
 
 
 */
