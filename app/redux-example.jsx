@@ -33,4 +33,3 @@ store.dispatch(actions.addMovie("Mallrats", "Drama"));
 store.dispatch(actions.changeName("April"));
 store.dispatch(actions.removeMovie(1));
 store.dispatch(actions.changeName("Anestasia"));
-

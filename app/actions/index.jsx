@@ -52,11 +52,12 @@ export let completeLocationFetch = (url) => {
 export let fetchLocation = () => {
   return (dispatch, getState) => {
     dispatch(startLocationFetch());
+
     axios.get('http://ipinfo.io').then(function (res) {
       let loc = res.data.loc;
       let baseUrl = "http://maps.google.com?q="
 
-      store.dispatch(completeLocationFetch(baseUrl + loc));
+      dispatch(completeLocationFetch(baseUrl + loc));
     });
   };
 };

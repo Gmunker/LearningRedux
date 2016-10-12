@@ -17,4 +17,6 @@ export let configure = () => {
     applyMiddleware(thunk), 
     window.devToolsExtension ? window.devToolsExtension() : f => f
   ));
+
+  return store;
 }
