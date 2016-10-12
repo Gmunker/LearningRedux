@@ -6,6 +6,7 @@ console.log('Starting redux example');
 const actions = require('./actions/index');
 const store = require('./store/configureStore').configure();
 
+
 let unsubscribe = store.subscribe(() => {
   let state = store.getState();
 
@@ -32,3 +33,4 @@ store.dispatch(actions.addMovie("Mallrats", "Drama"));
 store.dispatch(actions.changeName("April"));
 store.dispatch(actions.removeMovie(1));
 store.dispatch(actions.changeName("Anestasia"));
+

@@ -6,8 +6,6 @@ const {nameReducer, hobbiesReducer, moviesReducer, mapReducer} = require('./../r
 
 
 export let configure = () => {
-  // Reducer Combine
-  //---------------
   let reducer = combineReducers({
     name: nameReducer,
     hobbies: hobbiesReducer,
@@ -15,11 +13,8 @@ export let configure = () => {
     map: mapReducer
   });
 
-
-  // Add Support for Redux Dev Tools
-  //--------------------------------
   let store = createStore(reducer, compose(
-    redux.applyMiddleware(thunk), 
+    applyMiddleware(thunk), 
     window.devToolsExtension ? window.devToolsExtension() : f => f
   ));
 }
